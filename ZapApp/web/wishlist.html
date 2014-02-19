@@ -1,0 +1,65 @@
+<!doctype html>
+
+<html>
+
+    <head>
+        <title>Wishlist</title>
+
+        <script>
+            //function to validate entered email
+            function validateForm()
+            {
+                var x = document.forms["wlsub"]["email"].value;
+                var atpos = x.indexOf("@");
+                var dotpos = x.lastIndexOf(".");
+                
+                var y = document.forms["wlsub"]["pid"].value;
+                
+                if (y=="")
+                {
+                    alert("Product ID cannot be empty");
+                    return false;
+                }
+        
+                if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= x.length)
+                {
+                    alert("Not a valid e-mail address");
+                    return false;
+                }
+            }
+        </script>
+    </head>
+
+    <body>
+        <h1>Welcome to the Wishlist page</h1>
+        <hr/>
+        <p>Enter the product information and your email id to receive 
+            updates on a product price change.</p>
+        <br/>
+        <form name="wlsub" action="listen.jsp" onsubmit="return validateForm();" method="post">
+            <table>
+                <tr><td>Search By:</td>
+                    <td>
+                        <select name="searchby">
+                            <option value="prodid">Product ID</option>
+                            <option value="pname">Product Name</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Enter Product Name/ID</td>
+                    <td> <input type="text" name="pid"></td>
+                </tr>
+                <tr>
+                    <td>Enter Email</td>
+                    <td><input type="text" name="email"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><input type="submit" value="Submit" name="btnSubmit"></td>
+                </tr>
+            </table>
+        </form>
+
+    </body>	
+</html>
