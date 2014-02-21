@@ -18,7 +18,7 @@
                 try{
                     //create timer to check for price update repeatedly at some intervals
                     Timer timer = new Timer();
-                    timer.schedule(new CheckPrice(request.getParameter("pid"),request.getParameter("email")),0,10000);
+                    timer.schedule(new CheckPrice(request.getParameter("pid"),request.getParameter("email")),0,3600000);
                     out.println("Email " + request.getParameter("email") + " successfully subscribed.");
                 }catch(Exception e){
                     out.println("An error occured. Please retry on the <a href=\"wishlist.html\">Wishlist</a> page.");
@@ -28,7 +28,7 @@
                     try{
                     //create timer to check for price update repeatedly at some intervals
                     Timer timer = new Timer();
-                    timer.schedule(new CheckPriceByName(request.getParameter("pid"),request.getParameter("email")),0,10000);
+                    timer.schedule(new CheckPriceByName(request.getParameter("pid"),request.getParameter("email")),0,3600000);
                     out.println("Email " + request.getParameter("email") + " successfully subscribed.");
                 }catch(Exception e){
                     out.println("An error occured. Please retry on the <a href=\"wishlist.html\">Wishlist</a> page.");

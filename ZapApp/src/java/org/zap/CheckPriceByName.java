@@ -26,6 +26,9 @@ public class CheckPriceByName extends TimerTask {
 
     //ProductID and Subscriber Email
     String pid, email;
+    
+    //Limit results returned to a maximum of this value
+    String resultLimit = "10";
 
     //Discount value which triggers email if reached
     int discountValue = 20;
@@ -46,6 +49,7 @@ public class CheckPriceByName extends TimerTask {
                 this.cancel();
             }
         } catch (Exception e) {
+            e.printStackTrace();
             this.cancel();
         }
     }
@@ -91,6 +95,7 @@ public class CheckPriceByName extends TimerTask {
             }
 
         } catch (Exception e) {
+            e.printStackTrace();
             this.cancel();
         }
         //return null if product with expected discount is not found
@@ -103,9 +108,14 @@ public class CheckPriceByName extends TimerTask {
         StringBuffer b = new StringBuffer();
         b.append(prefix);
         b.append("?");
+        //search term
         b.append(APILiterals.searchTerm).append("=").append(pid);
+        //limit results since we're interested in only the most relevant search results
+        b.append("&").append("limit=").append(resultLimit);
+        //only include items on sale
         b.append("&").append(APILiterals.includes).append("=[\"onSale\"]");
         b.append("&filters={\"onSale\":[\"true\"]}");
+        //append API key
         b.append("&").append(APILiterals.key).append("=").append(keyValue);
         return b.toString();
     }
