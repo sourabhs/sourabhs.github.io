@@ -14,22 +14,37 @@ namespace org.zap
 {
     public class ZapHelper
     {
+        // API key
         string key = "52ddafbe3ee659bad97fcce7c53592916a6bfd73";
+
+        //Limit the results
         string resultLimit = "10";
 
+        string resultLiteral = "results";
+
+        // Main function which calls Zappos API and returns product combinations
         public List<ResultCombo> mainExecute(int num, float amt)
         {
+            // Retrieve products by calling API
             List<Result> results = MakeRequest();
+            //return null if no of products is less than desired no of items
             if (results.Count < num)
                 return null;
+
+            // Generate combinations of given number of products
             List<ResultCombo> l = generateCombinations(results,num);
+            
+            // Sort product combinations with total price closest to given amount
             l.Sort(delegate(ResultCombo x, ResultCombo y)
             {
+                // sort product combinations such that those with total price
+                // closest to desired amount come first in the list
                 return (Math.Abs(x.sum-amt)).CompareTo(Math.Abs(y.sum-amt));
             });
             return l;
         }
 
+        //function to generate combinations of given number of products from given list
         public List<ResultCombo> generateCombinations(List<Result> myList, int size)
         {
             List<ResultCombo> combinations = new List<ResultCombo>();
@@ -86,17 +101,22 @@ namespace org.zap
                 
                 using (HttpWebResponse response = request.GetResponse() as HttpWebResponse)
                 {
+                    // If error received in response to API call, return error
                     if (response.StatusCode != HttpStatusCode.OK)
                         throw new Exception(String.Format(
                         "Server error (HTTP {0}: {1}).",
                         response.StatusCode,
                         response.StatusDescription));
                 
+                    // Read response as string
                     Stream stream1 = response.GetResponseStream();
                     StreamReader sr = new StreamReader(stream1);
                     string strsb = sr.ReadToEnd();
+
+                    // Deserialize fetched object and convert to List form
                     dynamic objResponse = JsonConvert.DeserializeObject(strsb);
-                    JArray arr = (JArray)objResponse.SelectToken("results");
+                    JArray arr = (JArray)objResponse.SelectToken(resultLiteral);
+
                     return arr.ToObject<List<Result>>();
                 }
             }
@@ -109,6 +129,7 @@ namespace org.zap
 
     }
 
+    // Class  representing the results returned by API
     public class Result
     {
         public string price { get; set; }
@@ -116,6 +137,7 @@ namespace org.zap
         public string productId { get; set; }
     }
 
+    // Class to store product combinations info
     public class ResultCombo 
     {
         public List<Result> comb { get; set; }

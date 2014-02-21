@@ -12,22 +12,27 @@
 <script runat="server">
     void Search_API(object sender, EventArgs e)
     {
+        // if the page is being loaded in response to a postback
         if (IsPostBack)
         {
             try
             {
+                // Get the no if items and desired amount info from form
                 int num = Convert.ToInt32(TxtNum.Text);
                 float amt = (float) Convert.ToDecimal(TxtAmt.Text);
 
+                // Call helper CS class to process info and get the product combinations to display
                 ZapHelper zh = new ZapHelper();
                 List<ResultCombo> l2 = zh.mainExecute(num,amt);
                 List<Result> l = new List<Result>();
 
+                // If combination returned, show error.
                 if (l2 == null) {
                     ResultSet.InnerHtml = "An error occured or no results retrieved. Please retry.";
                     return;
                 }
                 
+                // Display all product combinations
                 for (int i = 0; i < l2.Count;i++ ) {
                     l = l2.ElementAt(i).comb;
                     ResultSet.InnerHtml += "<li>"+"Total Amount: $"+Convert.ToString(l2.ElementAt(i).sum);
@@ -41,7 +46,8 @@
                 
             }
             catch(Exception excp){
-                
+                ResultSet.InnerHtml = "An error occured. Please retry.";
+                return;
             }
         }
     }
