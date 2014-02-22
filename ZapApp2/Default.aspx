@@ -26,6 +26,8 @@
                 List<ResultCombo> l2 = zh.mainExecute(num,amt);
                 List<Result> l = new List<Result>();
 
+                ResultSet.InnerHtml = "";
+                
                 // If combination returned, show error.
                 if (l2 == null) {
                     ResultSet.InnerHtml = "An error occured or no results retrieved. Please retry.";
